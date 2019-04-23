@@ -1,0 +1,43 @@
+{
+  "appVersion": "0.0.1",
+
+  "apiUrl": "api",
+  "loginUrl": "api/auth/arcgis",
+  "logoutUrl": "api/logout",
+  "jsapiUrl": "https://js.arcgis.com/4.10/",
+  "jsapiV4": true,
+  "loginWithPopup": false,
+
+  "appId": "hkdtqXBMmZ8JJ5tD",
+
+
+  "mapConfig": {
+    "basemap": "dark-gray-vector",
+    "zoom": 4,
+    "center": [15, 65]
+  },
+
+  "webMapConfig": {
+    "id": "e691172598f04ea8881cd2a4adaa45ba",
+    "extent": {
+      "xmin":-14538934.276063018,
+      "ymin":2533399.2736569038,
+      "xmax":-6706890.609852799,
+      "ymax":6716033.461420637,
+      "spatialReference": 102100
+    }
+  },
+
+  "sceneConfig": {
+    "basemap": "dark-gray-vector",
+    "ground": "world-elevation"
+  },
+
+  "webSceneConfig": {
+    "id": "2c831005fd7b437787e3fd9ea53788e6"
+  },
+
+  "featureURLs": [
+    "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Landscape_Trees/FeatureServer/0"
+  ]
+}
