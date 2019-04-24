@@ -4,7 +4,7 @@
   "apiUrl": "api",
   "loginUrl": "api/auth/arcgis",
   "logoutUrl": "api/logout",
-  "jsapiUrl": "https://js.arcgis.com/4.10/",
+  "jsapiUrl": "https://js.arcgis.com/4.11/",
   "jsapiV4": true,
   "loginWithPopup": false,
 
@@ -14,7 +14,13 @@
   "mapConfig": {
     "basemap": "dark-gray-vector",
     "zoom": 4,
-    "center": [15, 65]
+    "center": [-98, 39]
+  },
+
+  "mapGeoJsonConfig": {
+    "basemap": "dark-gray-vector",
+    "zoom": 4,
+    "center": [-98, 39]
   },
 
   "webMapConfig": {
