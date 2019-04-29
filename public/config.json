@@ -19,7 +19,7 @@
 
   "mapGeoJsonConfig": {
     "basemap": "dark-gray-vector",
-    "zoom": 4,
+    "zoom": 10,
     "center": [-98, 39]
   },
 

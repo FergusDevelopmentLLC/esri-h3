@@ -4,10 +4,14 @@
   "private": true,
   "homepage": "/react-boot",
   "dependencies": {
+    "arcgis-js-api": "^4.11.1",
+    "body-parser": "^1.18.3",
     "calcite-react": "^0.29.4",
     "classnames": "^2.2.6",
     "detect-browser-language": "0.0.1",
+    "esri": "0.0.1-security",
     "esri-loader": "^2.6.0",
+    "express": "^4.16.4",
     "geojson2h3": "^1.0.1",
     "h3": "^2.0.0",
     "react": "^16.8.2",
@@ -27,9 +31,12 @@
     "eject": "react-scripts eject",
     "lint": "react-scripts run lint",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "dev": "concurrently --kill-others \"react-scripts start\" \"nodemon server.js\""
   },
   "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.11",
     "react-scripts": "^2.1.8"
   },
   "browserslist": {

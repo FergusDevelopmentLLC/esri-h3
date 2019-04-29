@@ -39,9 +39,9 @@ const Container = styled.div`
 `;
 
 // Variables
-const containerID = "map-view-container";
+const containerID = "map-view-contnainer";
 
-class Map extends Component {
+class GeoJsonExamplePromise extends Component {
 
   componentDidMount() {
     this.startup(
@@ -73,50 +73,67 @@ class Map extends Component {
       },
       error => {
         console.error("maperr", error);
-        window.setTimeout( () => {
+        window.setTimeout(() => {
           this.startup(mapConfig, node);
         }, 1000);
-      })
-  }
+      }
+    );
+  };
 
   finishedLoading = () => {
     //Update app state only after map and widgets are loaded
     this.props.mapLoaded();
-  }
+  };
 
-  init = (response) => {
-    this.view = response.view
+  init = response => {
+    this.view = response.view;
     this.map = response.view.map;
-  }
+  };
+  
+  setupWidgetsAndLayers = async () => {
+    
+    // JSAPI Map Widgets and Layers get loaded here!
+    
+    const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer']);
+    const latLngBox = await this.toLatLngExtent(this.view.extent);
+    console.log('latLngBox', latLngBox);
 
-  setupWidgetsAndLayers = () => {
-    loadModules([
-    
-    ])
-    .then( ([
-    
-    ]) => {
-    
-      //
-      // JSAPI Map Widgets and Layers get loaded here!
-      //
-    
+    const geoJsonLayer = new GeoJSONLayer({
+      url: `http://localhost:4000/h3/${latLngBox.top_left}/${latLngBox.bottom_left}/${latLngBox.bottom_right}/${latLngBox.top_right}`
     });
-  }
 
-  setupEventHandlers = (map) => {
-    loadModules([
+    this.map.add(geoJsonLayer);
+  };
 
-    ], (
+//   toLatLngExtent = async (extent) => {
+//     const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
+//     const top_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymax);
+//     const bottom_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymin);
+//     const bottom_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymin);
+//     const top_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymax);
+//     const latLngBox = {top_left, bottom_left, bottom_right, top_right};
+//     console.log('latLngBox', latLngBox);
+//     return latLngBox;
+//   };
 
-    ) => {
-
-      //
+  toLatLngExtent = (extent) => {
+    loadModules(['esri/geometry/support/webMercatorUtils'])
+      .then(([webMercatorUtils]) => {
+        const top_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymax);
+        const bottom_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymin);
+        const bottom_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymin);
+        const top_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymax);
+        const latLngBox = {top_left, bottom_left, bottom_right, top_right};
+        console.log('latLngBox', latLngBox);
+        return latLngBox;
+      })
+    };
+  
+  setupEventHandlers = map => {
+    loadModules([], () => {
       // JSAPI Map Event Handlers go here!
-      //
-
     });
-  }
+  };
 }
 
 const mapStateToProps = state => ({
@@ -130,4 +147,4 @@ const mapDispatchToProps = function (dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (Map);
+export default connect(mapStateToProps, mapDispatchToProps) (GeoJsonExamplePromise);

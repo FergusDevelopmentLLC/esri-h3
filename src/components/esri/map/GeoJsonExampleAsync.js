@@ -33,17 +33,15 @@ import { createView } from '../../../utils/esriHelper';
 // Styled Components
 import styled from 'styled-components';
 
-import geojson2h3 from 'geojson2h3';
-
 const Container = styled.div`
   height: 100%;
   width: 100%;
 `;
 
 // Variables
-const containerID = "map-view-container";
+const containerID = "map-view-contnainer";
 
-class Map extends Component {
+class GeoJsonExampleAsync extends Component {
 
   componentDidMount() {
     this.startup(
@@ -75,53 +73,54 @@ class Map extends Component {
       },
       error => {
         console.error("maperr", error);
-        window.setTimeout( () => {
+        window.setTimeout(() => {
           this.startup(mapConfig, node);
         }, 1000);
-      })
-  }
+      }
+    );
+  };
 
   finishedLoading = () => {
     //Update app state only after map and widgets are loaded
     this.props.mapLoaded();
-  }
+  };
 
-  init = (response) => {
-    this.view = response.view
+  init = response => {
+    this.view = response.view;
     this.map = response.view.map;
-  }
-
-  setupWidgetsAndLayers = () => {
-    loadModules([
-        'esri/layers/GeoJSONLayer'
-      ])
-      .then( ([
-        GeoJSONLayer
-      ]) => {
-        //
-        // JSAPI Map Widgets and Layers get loaded here!
-        //
-        const geoJsonLayer = new GeoJSONLayer({
-          url: "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces_shp.geojson"
-        });
-        this.map.add(geoJsonLayer);
+  };
   
-      });
-  }
+  setupWidgetsAndLayers = async () => {
+    
+    // JSAPI Map Widgets and Layers get loaded here!
+    
+    const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer']);
+    const box = await this.toLatLngExtent(this.view.extent);
 
-  setupEventHandlers = (map) => {
-    loadModules([
-
-    ], (
-
-    ) => {
-
-      //
-      // JSAPI Map Event Handlers go here!
-      //
-
+    const geoJsonLayer = new GeoJSONLayer({
+      url: `http://localhost:4000/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}`
     });
-  }
+
+    this.map.add(geoJsonLayer);
+  };
+
+  toLatLngExtent = async (extent) => {
+    
+    const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
+    const top_left = webMercatorUtils.xyToLngLat(this.view.extent.xmin, this.view.extent.ymax);
+    const bottom_left = webMercatorUtils.xyToLngLat(this.view.extent.xmin, this.view.extent.ymin);
+    const bottom_right = webMercatorUtils.xyToLngLat(this.view.extent.xmax, this.view.extent.ymin);
+    const top_right = webMercatorUtils.xyToLngLat(this.view.extent.xmax, this.view.extent.ymax);
+
+    return {top_left, bottom_left, bottom_right, top_right};
+  
+  };
+  
+  setupEventHandlers = map => {
+    loadModules([], () => {
+      // JSAPI Map Event Handlers go here!
+    });
+  };
 }
 
 const mapStateToProps = state => ({
@@ -135,4 +134,4 @@ const mapDispatchToProps = function (dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (Map);
+export default connect(mapStateToProps, mapDispatchToProps) (GeoJsonExampleAsync);

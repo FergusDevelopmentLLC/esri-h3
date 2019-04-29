@@ -26,11 +26,11 @@ import TopNavList from 'calcite-react/TopNav/TopNavList';
 import TopNavLink from 'calcite-react/TopNav/TopNavLink';
 import Map from './esri/map/Map';
 import SceneViewExample from './esri/map/SceneViewExample';
-import GeoJsonExample from './esri/map/GeoJsonExample';
+import GeoJsonExampleAsync from './esri/map/GeoJsonExampleAsync';
+import GeoJsonExamplePromise from './esri/map/GeoJsonExamplePromise';
 import LoadScreen from './LoadScreen';
 import UserAccount from './UserAccount';
 import logo from '../styles/images/Esri-React-Logo.svg';
-
 
 // Styled Components
 import styled from 'styled-components';
@@ -113,11 +113,18 @@ class Main extends Component {
             mapConfig={this.props.config.sceneConfig}
             is3DScene={true}
           /> */}
-          <GeoJsonExample>
+          {/* <GeoJsonExampleAsync>
             onMapLoaded={this.props.mapLoaded}
             mapConfig={this.props.config.mapGeoJsonConfig}
             is3DScene={false}
-          </GeoJsonExample>
+          </GeoJsonExampleAsync> */}
+
+          <GeoJsonExamplePromise>
+            onMapLoaded={this.props.mapLoaded}
+            mapConfig={this.props.config.mapGeoJsonConfig}
+            is3DScene={false}
+          </GeoJsonExamplePromise>
+        
         </MapWrapper>
       </Container>
     )
