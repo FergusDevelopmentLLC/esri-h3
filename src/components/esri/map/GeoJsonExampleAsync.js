@@ -68,7 +68,6 @@ class GeoJsonExampleAsync extends Component {
       response => {
         this.init(response);
         this.setupEventHandlers(this.map);
-        console.log(this.map);
         this.setupWidgetsAndLayers();
         this.finishedLoading();
       },
