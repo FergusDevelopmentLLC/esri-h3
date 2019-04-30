@@ -68,6 +68,7 @@ class GeoJsonExampleAsync extends Component {
       response => {
         this.init(response);
         this.setupEventHandlers(this.map);
+        console.log(this.map);
         this.setupWidgetsAndLayers();
         this.finishedLoading();
       },
@@ -105,12 +106,12 @@ class GeoJsonExampleAsync extends Component {
   };
 
   toLatLngExtent = async (extent) => {
-    
+
     const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
-    const top_left = webMercatorUtils.xyToLngLat(this.view.extent.xmin, this.view.extent.ymax);
-    const bottom_left = webMercatorUtils.xyToLngLat(this.view.extent.xmin, this.view.extent.ymin);
-    const bottom_right = webMercatorUtils.xyToLngLat(this.view.extent.xmax, this.view.extent.ymin);
-    const top_right = webMercatorUtils.xyToLngLat(this.view.extent.xmax, this.view.extent.ymax);
+    const top_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymax);
+    const bottom_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymin);
+    const bottom_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymin);
+    const top_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymax);
 
     return {top_left, bottom_left, bottom_right, top_right};
   

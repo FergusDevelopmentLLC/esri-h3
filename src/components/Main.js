@@ -113,6 +113,7 @@ class Main extends Component {
             mapConfig={this.props.config.sceneConfig}
             is3DScene={true}
           /> */}
+
           {/* <GeoJsonExampleAsync>
             onMapLoaded={this.props.mapLoaded}
             mapConfig={this.props.config.mapGeoJsonConfig}

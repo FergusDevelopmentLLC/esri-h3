@@ -89,22 +89,57 @@ class GeoJsonExamplePromise extends Component {
     this.view = response.view;
     this.map = response.view.map;
   };
-  
-  setupWidgetsAndLayers = async () => {
-    
-    // JSAPI Map Widgets and Layers get loaded here!
-    
-    const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer']);
-    const latLngBox = await this.toLatLngExtent(this.view.extent);
-    console.log('latLngBox', latLngBox);
 
-    const geoJsonLayer = new GeoJSONLayer({
-      url: `http://localhost:4000/h3/${latLngBox.top_left}/${latLngBox.bottom_left}/${latLngBox.bottom_right}/${latLngBox.top_right}`
+  onSuccess = () => {
+    console.log('success');
+  }
+
+  setupWidgetsAndLayers = () => {
+    
+    // const promise = new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve()
+    //     }, 2000)
+    // });
+    
+    // const promise = new Promise((resolve, reject) => {
+    //     return loadModules(['esri/layers/GeoJSONLayer'])
+    //       .then((geoJsonLayer) => {
+    //         console.log('geoJsonLayer', geoJsonLayer);
+    //         resolve();
+    //       })
+    // });
+
+    const promise = new Promise((resolve, reject) => {
+      this.toLatLngExtent(this.view.extent)
+        .then((box) => {
+          console.log(box);
+        })
     });
 
-    this.map.add(geoJsonLayer);
+    promise.then((box) => {
+      console.log(box);
+    })
+
   };
 
+//   setupWidgetsAndLayers = async () => {
+    
+//     // JSAPI Map Widgets and Layers get loaded here!
+    
+//     const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer']);
+//     console.log([GeoJSONLayer]);
+
+//     const latLngBox = await this.toLatLngExtent(this.view.extent);
+//     console.log('latLngBox', latLngBox);
+
+//     const geoJsonLayer = new GeoJSONLayer({
+//       url: `http://localhost:4000/h3/${latLngBox.top_left}/${latLngBox.bottom_left}/${latLngBox.bottom_right}/${latLngBox.top_right}`
+//     });
+
+//     this.map.add(geoJsonLayer);
+//   };
+  
 //   toLatLngExtent = async (extent) => {
 //     const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
 //     const top_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymax);
@@ -124,10 +159,18 @@ class GeoJsonExamplePromise extends Component {
         const bottom_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymin);
         const top_right = webMercatorUtils.xyToLngLat(extent.xmax, extent.ymax);
         const latLngBox = {top_left, bottom_left, bottom_right, top_right};
-        console.log('latLngBox', latLngBox);
+        //console.log('latLngBox', latLngBox);
+        //console.log('here');
         return latLngBox;
       })
-    };
+  };
+  
+  // toLatLngExtent = (extent) => {
+  //   loadModules(['esri/geometry/support/webMercatorUtils'])
+  //     .then(([webMercatorUtils]) => {
+  //       return {};
+  //     })
+  // };
   
   setupEventHandlers = map => {
     loadModules([], () => {
