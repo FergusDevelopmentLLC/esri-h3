@@ -114,17 +114,17 @@ class Main extends Component {
             is3DScene={true}
           /> */}
 
-          {/* <GeoJsonExampleAsync>
+          <GeoJsonExampleAsync>
             onMapLoaded={this.props.mapLoaded}
             mapConfig={this.props.config.mapGeoJsonConfig}
             is3DScene={false}
-          </GeoJsonExampleAsync> */}
+          </GeoJsonExampleAsync>
 
-          <GeoJsonExamplePromise>
+          {/* <GeoJsonExamplePromise>
             onMapLoaded={this.props.mapLoaded}
             mapConfig={this.props.config.mapGeoJsonConfig}
             is3DScene={false}
-          </GeoJsonExamplePromise>
+          </GeoJsonExamplePromise> */}
         
         </MapWrapper>
       </Container>

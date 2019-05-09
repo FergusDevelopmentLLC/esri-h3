@@ -45,9 +45,9 @@ class GeoJsonExampleAsync extends Component {
 
   componentDidMount() {
     this.startup(
-      this.props.config.mapConfig,
+      this.props.config.mapGeoJsonConfig,
       containerID,
-      this.props.is3DScene
+      this.props.config.mapGeoJsonConfig.is3DScene
     );
   }
 
@@ -95,16 +95,326 @@ class GeoJsonExampleAsync extends Component {
     // JSAPI Map Widgets and Layers get loaded here!
     
     const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer']);
+    const [UniqueValueRenderer]  = await loadModules(['esri/renderers/UniqueValueRenderer']);
     const box = await this.toLatLngExtent(this.view.extent);
 
-    const geoJsonLayer = new GeoJSONLayer({
-      url: `http://localhost:4000/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}`
+    const defaultHex = {
+      type: "simple-fill", 
+      color: [253, 141, 60, 0],
+      outline: {
+        color: [128, 128, 128, 0.4],
+        width: "0.5px"
+      }
+    };
+
+    const pentagon = {
+      type: "simple-fill", 
+      color: [253, 141, 60, 1],
+      outline: {
+        color: [128, 128, 128, 0.4],
+        width: "0.5px"
+      }
+    };
+
+    const ur = new UniqueValueRenderer({
+      field: 'isPentagon',
+      uniqueValueInfos: [
+        {value: 'false', symbol: defaultHex},
+        {value: 'true', symbol: pentagon}
+      ]
+    });
+
+    let base = 0.12086092715231789;
+    if(Math.floor(this.view.zoom == 3)) {
+      base = 0.12086092715231789;
+    }
+
+    if(Math.floor(this.view.zoom == 4)) {
+      base = 0.07560706401766004;
+    }
+
+    if(Math.floor(this.view.zoom == 5)) {
+      base = 0.05408388520971302;
+    }
+
+    const break_point = base/4;
+    //const break_point = 0.07560706401766004/4;
+    
+    let b1 = break_point;
+    let b2 = 2 * break_point;
+    let b3 = 3 * break_point;
+    let b4 = 4 * break_point;
+
+    console.log(b1);
+    console.log(b2);
+    console.log(b3);
+    console.log(b4);
+
+    let break0 = {
+      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      color: [255, 255, 255, 0],
+      style: "solid",
+      outline: {
+        width: 0.2,
+        color: [255, 255, 255, 0]
+      }
+    };
+
+    let break01 = {
+      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      color: [255, 255, 255, 0],
+      style: "solid",
+      outline: {
+        width: 0.2,
+        color: [255, 255, 255, 0]
+      }
+    };
+    
+    let break02 = {
+      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      color: "#b1cdc2",
+      style: "solid",
+      outline: {
+        width: 0.2,
+        color: [255, 255, 255, 0]
+      }
+    };
+    
+    let break03 = {
+      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      color: "#38627a",
+      style: "solid",
+      outline: {
+        width: 0.2,
+        color: [255, 255, 255, 0]
+      }
+    };
+    
+    let break04 = {
+      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      color: "#0d2644",
+      style: "solid",
+      outline: {
+        width: 0.2,
+        color: [255, 255, 255, 0]
+      }
+    };
+
+    let renderer = {
+      type: "class-breaks", // autocasts as new ClassBreaksRenderer()
+      field: "meteor_count", // total number of adults (25+) with a college degree
+      normalizationField: "tot_meteor_count", // total number of adults 25+
+      defaultSymbol: {
+        type: "simple-fill", // autocasts as new SimpleFillSymbol()
+        color: [50, 50, 50, .5],
+        style: "solid",
+        outline: {
+          width: 0.5,
+          color: [255, 255, 255, 0]
+        }
+      },
+      defaultLabel: "no data",
+      classBreakInfos: [
+        {
+          minValue: 0,
+          maxValue: 0,
+          symbol: break0
+        },
+        {
+          minValue: .001,
+          maxValue: b2 - .001,
+          symbol: break01
+        },
+        {
+          minValue: b2,
+          maxValue: b3 - .001,
+          symbol: break02
+        },
+        {
+          minValue: b3,
+          maxValue: b4 - .001,
+          symbol: break03
+        },
+        {
+          minValue: b4,
+          maxValue: 1,
+          symbol: break04
+        }
+      ] // legend label for features that don't match a class break
+    };
+    
+    const url = `http://localhost:4000/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}/${this.view.zoom}`;
+
+    const geoJsonLayer = await new GeoJSONLayer({
+      url: url,
+      renderer: renderer,
+      outFields: ["*"]
     });
 
     this.map.add(geoJsonLayer);
-  };
 
+    //https://odoe.github.io/psdw-2019/ArcGIS-API-4-for-JavaScript-Arcade-Deep-Dive/index.html#/24
+    //https://github.com/odoe/psdw-2019/blob/b3a82718729bc856bc5614d651502f4252cf11e2/ArcGIS-API-4-for-JavaScript-Arcade-Deep-Dive/presentation.md
+    //https://codepen.io/odoe/pen/wZVPzo?editors=1000
+    //https://www.researchgate.net/profile/Timothy_Ohiggins/publication/326579661_Fold_your_own_globe/links/5b5734c845851507a7c52dce/Fold-your-own-globe.pdf
+
+    // const layerView = await this.view.whenLayerView(geoJsonLayer);
+    // console.log('layerView', layerView);
+    // const [watchUtils] = await loadModules(['esri/core/watchUtils']);
+    // console.log('watchUtils', watchUtils);
+    // const isDoneUpdating = await watchUtils.whenFalseOnce(layerView, "updating");
+    // console.log(isDoneUpdating);
+    // console.log('done updating');
+    // const query = geoJsonLayer.createQuery();
+    // query.where = "isPentagon = 'false'";
+    // const featureSet = await layerView.queryFeatures(query);
+    // console.log('featureset', featureSet);
+
+    const [watchUtils] = await loadModules(['esri/core/watchUtils']);
+    watchUtils.whenTrue(this.view, "stationary", async () => {
+          
+        const box = await this.toLatLngExtent(this.view.extent);
+
+        let base = 0.12086092715231789;
+        if(Math.floor(this.view.zoom == 3)) {
+          base = 0.12086092715231789;
+        }
+
+        if(Math.floor(this.view.zoom == 4)) {
+          base = 0.07560706401766004;
+        }
+
+        if(Math.floor(this.view.zoom == 5)) {
+          base = 0.05408388520971302;
+        }
+
+        const break_point = base/4;
+        //const break_point = 0.07560706401766004/4;
+        
+        let b1 = break_point;
+        let b2 = 2 * break_point;
+        let b3 = 3 * break_point;
+        let b4 = 4 * break_point;
+
+        console.log(b1);
+        console.log(b2);
+        console.log(b3);
+        console.log(b4);
+
+        let break0 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: [255, 255, 255, 0],
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0]
+          }
+        };
+
+        let break01 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: [255, 255, 255, 0],
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0]
+          }
+        };
+        
+        let break02 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#b1cdc2",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0]
+          }
+        };
+        
+        let break03 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#38627a",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0]
+          }
+        };
+        
+        let break04 = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#0d2644",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0]
+          }
+        };
+
+        let renderer = {
+          type: "class-breaks", // autocasts as new ClassBreaksRenderer()
+          field: "meteor_count", // total number of adults (25+) with a college degree
+          normalizationField: "tot_meteor_count", // total number of adults 25+
+          defaultSymbol: {
+            type: "simple-fill", // autocasts as new SimpleFillSymbol()
+            color: [50, 50, 50, .1],
+            style: "solid",
+            outline: {
+              width: 0.5,
+              color: [255, 255, 255, .1]
+            }
+          },
+          defaultLabel: "no data",
+          classBreakInfos: [
+            {
+              minValue: 0,
+              maxValue: 0,
+              symbol: break0
+            },
+            {
+              minValue: .001,
+              maxValue: b2 - .001,
+              symbol: break01
+            },
+            {
+              minValue: b2,
+              maxValue: b3 - .001,
+              symbol: break02
+            },
+            {
+              minValue: b3,
+              maxValue: b4 - .001,
+              symbol: break03
+            },
+            {
+              minValue: b4,
+              maxValue: 1,
+              symbol: break04
+            }
+          ] // legend label for features that don't match a class break
+        };
+        
+        const url = `http://localhost:4000/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}/${this.view.zoom}`;
+        console.log(url);
+
+        const geoJsonLayer = new GeoJSONLayer({
+          url: url,
+          renderer: renderer,
+          outFields: ["*"]
+        });
+        
+        this.map.removeAll();
+        this.map.add(geoJsonLayer);
+
+      });
+    };
+  
   toLatLngExtent = async (extent) => {
+    
+    // extent is an array?
+    // extentToLatLng = async (...extent) => {
+    // console.log(extent);
+    // const [top_left, bottom_left, bottom_right, top_right] = extent;
 
     const [webMercatorUtils] = await loadModules(['esri/geometry/support/webMercatorUtils']);
     const top_left = webMercatorUtils.xyToLngLat(extent.xmin, extent.ymax);
@@ -117,10 +427,19 @@ class GeoJsonExampleAsync extends Component {
   };
   
   setupEventHandlers = map => {
+    
     loadModules([], () => {
+      
+      //
       // JSAPI Map Event Handlers go here!
+      //
+    
     });
   };
+
+  mapResized = (e) => {
+    console.log(e);
+  }
 }
 
 const mapStateToProps = state => ({

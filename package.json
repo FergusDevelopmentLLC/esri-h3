@@ -12,6 +12,7 @@
     "esri": "0.0.1-security",
     "esri-loader": "^2.6.0",
     "express": "^4.16.4",
+    "fs": "0.0.1-security",
     "geojson2h3": "^1.0.1",
     "h3": "^2.0.0",
     "react": "^16.8.2",

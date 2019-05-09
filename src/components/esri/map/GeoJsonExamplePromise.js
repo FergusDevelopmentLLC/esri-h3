@@ -95,14 +95,14 @@ class GeoJsonExamplePromise extends Component {
       return this.toLatLngExtent(this.view.extent)
         .then((latLngBox) => {
           return loadModules(['esri/layers/GeoJSONLayer'])
-          .then(([GeoJSONLayer]) => {
-            const geoJsonLayer = new GeoJSONLayer({
-              url: `http://localhost:4000/h3/${latLngBox.top_left}/${latLngBox.bottom_left}/${latLngBox.bottom_right}/${latLngBox.top_right}`
-            });
-            this.map.add(geoJsonLayer);
-          })
+            .then(([GeoJSONLayer]) => {
+              const geoJsonLayer = new GeoJSONLayer({
+                url: `http://localhost:4000/h3/${latLngBox.top_left}/${latLngBox.bottom_left}/${latLngBox.bottom_right}/${latLngBox.top_right}`
+              });
+              this.map.add(geoJsonLayer);
+            })
         })
-      });
+    });
   };
 
   toLatLngExtent = (extent) => {

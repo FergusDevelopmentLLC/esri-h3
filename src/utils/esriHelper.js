@@ -201,7 +201,9 @@ function initScene(mapConfig, node) {
 
             new SceneView({
                 container: node,
-                map: map
+                map: map,
+                center: mapConfig.center,
+                zoom: mapConfig.zoom
             }).when(
                 response => {
                     resolve({
