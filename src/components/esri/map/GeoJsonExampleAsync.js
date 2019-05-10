@@ -197,7 +197,7 @@ class GeoJsonExampleAsync extends Component {
           
       const box = await this.toLatLngExtent(this.view.extent);
 
-      const url = `http://localhost:4000/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}/${this.view.zoom}`;
+      const url = `http://localhost:8670/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}/${this.view.zoom}`;
       console.log(url);
 
       const geoJsonLayer = new GeoJSONLayer({

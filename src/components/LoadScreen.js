@@ -105,7 +105,7 @@ class LoadScreen extends Component {
           </Wrapper>
           <Title>
             <Logo src={logo}></Logo>
-            <Label>Esri-React-Boot</Label>
+            <Label>Esri-h3</Label>
           </Title>
         </Container>
       )

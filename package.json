@@ -2,7 +2,7 @@
   "name": "react-jsapi-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/react-boot",
+  "homepage": "/",
   "dependencies": {
     "arcgis-js-api": "^4.11.1",
     "body-parser": "^1.18.3",
