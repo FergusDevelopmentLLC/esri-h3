@@ -112,7 +112,7 @@ class GeoJsonExampleAsync extends Component {
       type: "simple-fill", 
       color: [253, 141, 60, 1],
       outline: {
-        color: [128, 128, 128, 0],
+        color: [128, 128, 128, 0.3],
         width: "0.5px"
       }
     };
@@ -129,7 +129,7 @@ class GeoJsonExampleAsync extends Component {
       type: "simple-fill", 
       color: [239, 243, 255, 0],
       outline: {
-        color: [128, 128, 128, 0],
+        color: [128, 128, 128, 0.3],
         width: "0.5px"
       }
     };
@@ -138,7 +138,7 @@ class GeoJsonExampleAsync extends Component {
       type: "simple-fill", 
       color: [239, 243, 255, 0.3],
       outline: {
-        color: [128, 128, 128, .2],
+        color: [128, 128, 128, 0.3],
         width: "0.5px"
       }
     };
@@ -147,7 +147,7 @@ class GeoJsonExampleAsync extends Component {
       type: "simple-fill", 
       color: [189,215,231, 0.3],
       outline: {
-        color: [128, 128, 128, .2],
+        color: [128, 128, 128, 0.3],
         width: "0.5px"
       }
     };
@@ -156,7 +156,7 @@ class GeoJsonExampleAsync extends Component {
       type: "simple-fill", 
       color: [107,174,214, 0.3],
       outline: {
-        color: [128, 128, 128, .2],
+        color: [128, 128, 128, 0.3],
         width: "0.5px"
       }
     };
@@ -165,7 +165,7 @@ class GeoJsonExampleAsync extends Component {
       type: "simple-fill", 
       color: [49,130,189, 0.3],
       outline: {
-        color: [128, 128, 128, .2],
+        color: [128, 128, 128, 0.3],
         width: "0.5px"
       }
     };
@@ -174,7 +174,7 @@ class GeoJsonExampleAsync extends Component {
       type: "simple-fill", 
       color: [8,81,156, 0.3],
       outline: {
-        color: [128, 128, 128, .2],
+        color: [128, 128, 128, 0.3],
         width: "0.5px"
       }
     };
@@ -197,7 +197,7 @@ class GeoJsonExampleAsync extends Component {
           
       const box = await this.toLatLngExtent(this.view.extent);
 
-      const url = `http://127.0.01:8670/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}/${this.view.zoom}`;
+      const url = `http://127.0.0.1:8670/h3/${box.top_left}/${box.bottom_left}/${box.bottom_right}/${box.top_right}/${this.view.zoom}`;
       console.log(url);
 
       const geoJsonLayer = new GeoJSONLayer({
