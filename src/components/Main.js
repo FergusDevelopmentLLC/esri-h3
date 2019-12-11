@@ -123,11 +123,20 @@ class Main extends Component {
           </GeoJsonExampleAsync> */}
           
           <Route 
+            exact path="/"
+            render={(props) => <HexGlobe {...props} onMapLoaded={this.props.mapLoaded}
+            mapConfig={this.props.config.mapGeoJsonConfig}
+            is3DScene={true}
+            showPentagons={true}
+            />}
+          />
+
+          <Route 
             exact path="/hex-globe"
             render={(props) => <HexGlobe {...props} onMapLoaded={this.props.mapLoaded}
             mapConfig={this.props.config.mapGeoJsonConfig}
             is3DScene={true}
-            showPentagons={false}
+            showPentagons={true}
             />}
           />
 
