@@ -85,7 +85,7 @@ class Main extends Component {
       <Container>
         <LoadScreen isLoading={this.props.mapLoaded} />
 
-        <Nav>
+        {/* <Nav>
           <Logo href="#" src={logo} />
           <TopNavTitle href="#">ArcGIS JS API + React Boot</TopNavTitle>
           <NavList>
@@ -100,7 +100,7 @@ class Main extends Component {
             signIn={this.signIn}
             signOut={this.signOut}
           />
-        </Nav>
+        </Nav> */}
 
         <MapWrapper>
           {/* <Map>
