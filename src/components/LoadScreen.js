@@ -30,9 +30,10 @@ const Container = styled.div`
   z-index: 10;
   height: 100%;
   width: 100%;
-  background: rgba(255,255,255,0.1) url(${background}) no-repeat center/cover;
+  background-color: black;
   background-blend-mode: screen;
 `;
+//background: rgba(255,255,255,0.1) url(${background}) no-repeat center/cover;
 
 const FadingContainer = styled(Container)`
   animation-name: ${fadeOut};
@@ -104,8 +105,8 @@ class LoadScreen extends Component {
             <Loader/>
           </Wrapper>
           <Title>
-            <Logo src={logo}></Logo>
-            <Label>Esri-h3</Label>
+            {/* <Logo src={logo}></Logo> */}
+            {/* <Label>Esri-h3</Label> */}
           </Title>
         </Container>
       )

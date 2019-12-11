@@ -11,6 +11,7 @@
 
 // React
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 
 // Redux
 import { bindActionCreators } from 'redux';
@@ -27,6 +28,7 @@ import TopNavLink from 'calcite-react/TopNav/TopNavLink';
 import Map from './esri/map/Map';
 import SceneViewExample from './esri/map/SceneViewExample';
 import GeoJsonExampleAsync from './esri/map/GeoJsonExampleAsync';
+import HexGlobe from './esri/map/HexGlobe';
 import GeoJsonExamplePromise from './esri/map/GeoJsonExamplePromise';
 import LoadScreen from './LoadScreen';
 import UserAccount from './UserAccount';
@@ -114,12 +116,38 @@ class Main extends Component {
             is3DScene={true}
           /> */}
 
-          <GeoJsonExampleAsync>
+          {/* <GeoJsonExampleAsync>
             onMapLoaded={this.props.mapLoaded}
             mapConfig={this.props.config.mapGeoJsonConfig}
             is3DScene={false}
-          </GeoJsonExampleAsync>
+          </GeoJsonExampleAsync> */}
+          
+          <Route 
+            exact path="/hex-globe"
+            render={(props) => <HexGlobe {...props} onMapLoaded={this.props.mapLoaded}
+            mapConfig={this.props.config.mapGeoJsonConfig}
+            is3DScene={true}
+            showPentagons={false}
+            />}
+          />
 
+          <Route 
+            exact path="/hex-globe-pent"
+            render={(props) => <HexGlobe {...props} onMapLoaded={this.props.mapLoaded}
+            mapConfig={this.props.config.mapGeoJsonConfig}
+            is3DScene={true}
+            showPentagons={true}
+            />}
+          />
+
+          <Route 
+            exact path="/mcdowells"
+            render={(props) => <GeoJsonExampleAsync {...props} 
+            onMapLoaded={this.props.mapLoaded}
+            mapConfig={this.props.config.mapGeoJsonConfig}
+            is3DScene={true} />}
+          />
+            
           {/* <GeoJsonExamplePromise>
             onMapLoaded={this.props.mapLoaded}
             mapConfig={this.props.config.mapGeoJsonConfig}
